@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        video { width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>WebRTC Viewer</h1>
+    <video id="videoElement" controls autoplay></video>
+    <script>
+        const videoElement = document.getElementById('videoElement');
+        const authToken = 'YOUR_AUTH_TOKEN'; // Replace with actual token
+
+        // Connect to the WebRTC stream
+        async function startVideoStream() {
+            const response = await fetch('https://your-streaming-endpoint?token=' + authToken);
+            if (!response.ok) {
+                console.error('Failed to connect to stream:', response.status);
+                return;
+            }
+            const stream = await response.body;
+            const mediaStream = new MediaStream();
+
+            // Assuming you have a way to extract video tracks
+            videoElement.srcObject = mediaStream;
+        }
+
+        startVideoStream();
+    </script>
+</body>
+</html>
