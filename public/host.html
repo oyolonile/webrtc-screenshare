@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Screen Sharing Host</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #videoElement { width: 100%; height: auto; border: 2px solid black; }
+        #startButton, #stopButton { margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>WebRTC Screen Sharing Host</h1>
+    <video id="videoElement" autoplay></video>
+    <br />
+    <button id="startButton">Start Sharing</button>
+    <button id="stopButton" disabled>Stop Sharing</button>
+
+    <script>
+        let localStream;
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const videoElement = document.getElementById('videoElement');
+
+        // Handle authentication (this should be replaced with actual authentication)
+        const authenticateUser = () => {
+            // Example: Replace with your auth logic
+            return true; // Authentication succeeded
+        };
+
+        startButton.onclick = async () => {
+            if (!authenticateUser()) {
+                alert('Authentication failed!');
+                return;
+            }
+
+            try {
+                // Capture screen
+                localStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                videoElement.srcObject = localStream;
+                startButton.disabled = true;
+                stopButton.disabled = false;
+            } catch (err) {
+                console.error('Error: ' + err);
+            }
+        };
+
+        stopButton.onclick = () => {
+            localStream.getTracks().forEach(track => track.stop());
+            videoElement.srcObject = null;
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        };
+    </script>
+</body>
+</html>
