@@ -1,0 +1,41 @@
+name: cPanel DNS Management
+
+on:
+  workflow_dispatch:
+
+jobs:
+  manage-dns:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up environment variables
+      run: |
+        echo "DNS_ACTION=${{ github.event.inputs.dns_action }}" >> $GITHUB_ENV
+        echo "DNS_NAME=${{ github.event.inputs.dns_name }}" >> $GITHUB_ENV
+        echo "DNS_TYPE=${{ github.event.inputs.dns_type }}" >> $GITHUB_ENV
+        echo "DNS_CONTENT=${{ github.event.inputs.dns_content }}" >> $GITHUB_ENV
+
+    - name: Manage DNS records
+      run: |
+        echo "Managing DNS record with action: $DNS_ACTION" 
+        # Here you'll call your script or API to perform actions based on the DNS_ACTION env variable.
+        # For example, if you want to call cPanel API, you could use curl commands.
+        # curl -X POST -d '{...}' https://your-cpanel-domain:2083/json-api/... 
+
+  inputs:
+    dns_action:
+      description: 'The action to perform: add, edit, or delete'
+      required: true
+      default: 'add'
+    dns_name:
+      description: 'The DNS record name'
+      required: true
+    dns_type:
+      description: 'The DNS record type (A, CNAME, etc.)'
+      required: true
+    dns_content:
+      description: 'The content of the DNS record'
+      required: true
